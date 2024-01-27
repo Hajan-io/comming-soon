@@ -24,7 +24,9 @@
                 if (res.status === 201) {
                     document.querySelector('.form-group').innerHTML = "الرجاء التحقق من بريدك الإلكتروني، ونشكرك جزيل الشكر";
                 }
-            });
+            }).catch((error) => {
+                document.querySelector('.form-group').innerHTML = "تم تأكيد بريدكم من قبل"
+            });;
         }
     </script>
 </head>
