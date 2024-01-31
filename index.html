@@ -19,14 +19,22 @@
         function sendEmail() {
 
             const email = document.getElementById('email').value;
-            axios.post('https://dev-api.riyadacenter.com/mail', { url: email }).then((res) => {
-                console.log('res ', res);
-                if (res.status === 201) {
-                    document.querySelector('.form-group').innerHTML = "الرجاء التحقق من بريدك الإلكتروني، ونشكرك جزيل الشكر";
-                }
-            }).catch((error) => {
-                document.querySelector('.form-group').innerHTML = "تم تأكيد بريدكم من قبل"
-            });;
+            if (email.length > 0) {
+                const b = document.getElementById('button').disabled = true;
+                axios.post('https://dev-api.riyadacenter.com/mail', { url: email.trim() }).then((res) => {
+                    console.log('res ', res);
+                    if (res.status === 201) {
+                        document.querySelector('.form-group').innerHTML = "الرجاء التحقق من بريدك الإلكتروني، ونشكرك جزيل الشكر";
+                    }
+                }).catch((error) => {
+                    if (error?.response?.status === 409) {
+                        document.querySelector('.form-group').innerHTML = "تم تأكيد بريدكم من قبل، إذا كانت لديكم أي استفسارات، يرجى التواصل مع فريق الدعم";
+                    } else {
+                        document.querySelector('.form-group').innerHTML = "حدث خطأ أثناء معالجة الطلب، يرجى المحاولة مرة أخرى في وقت لاحق. إذا استمرت المشكلة، يرجى التواصل مع فريق الدعم";
+                    }
+                });
+
+            }
         }
     </script>
 </head>
@@ -115,12 +123,12 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <h5 class="has-line">انتظرونا قريبًا</h5>
-                        <h1>🚀 مركز اللغات الرائد قادم لكم </h1>
+                        <h1><span id="element"></span></h1>
                         <h1> </h1>
                         <!-- <form> -->
                         <div class="form-group">
                             <input type="email" id="email" placeholder="Enter your email">
-                            <button onclick="sendEmail()">أعلمني</button>
+                            <button id="button" onclick="sendEmail()">أعلمني</button>
                         </div>
                         <!-- </form> -->
                     </div>
@@ -136,5 +144,19 @@
         <!-- Only Mobile View Ends Here -->
     </section>
 </body>
+<script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+<script>
+    var typed = new Typed('#element', {
+        strings: [
+            'تجربة فريدة تنتظركم',
+            'أول منصة عربية مغربية للتدريب واللغات',
+            'رحلة التعلم الملهمة تبدأ هنا',
+            'انطلقوا مع مركز الريادة للتدريب واللغات الآن'
+        ],
+        typeSpeed: 70,
+        fadeOut: true,
+        loop: true
+    });
+</script>
 
 </html>
